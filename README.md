@@ -1,4 +1,4 @@
-# OpenTelemetry Demo
+# OpenTelemetry OAuth End-to-End Tracing
 
 An example end-to-end deployment for a phantom token flow that uses OpenTelemetry.
 
