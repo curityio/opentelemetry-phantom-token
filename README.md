@@ -1,6 +1,6 @@
 # OpenTelemetry OAuth End-to-End Tracing
 
-An example end-to-end deployment for a phantom token flow that uses OpenTelemetry.
+An example end-to-end deployment for a phantom token flow that uses OpenTelemetry tracing.
 
 ## Phantom Token Flow
 
@@ -9,7 +9,7 @@ The example uses a client that calls an API in a phantom token flow:
 ![phantom token flow](images/phantom-token-flow.svg)
 
 During an API request, each component generates OpenTelemetry spans within an overall trace.\
-You can view all traces within an observability tool, within a TraceId that the client generates.
+You can view all traces within an observability tool, for a trace ID that the client generates.
 
 ![trace-overview](images/trace-overview.png)
 

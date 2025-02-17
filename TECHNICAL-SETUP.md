@@ -1,6 +1,6 @@
 # Technical Setup
 
-The following notes explain more details about the technical setup and the example API.
+The following notes explain further details about the technical setup and the example API.
 
 ## Open Telemetry Collector
 
@@ -46,7 +46,7 @@ This means it starts with the following command to load OpenTelemetry before the
 node --experimental-loader=@opentelemetry/instrumentation/hook.mjs --import ./dist/telemetry.js dist/server.js
 ```
 
-The API also writes JSON logs that include the traceId and spanId of incoming requests.
+The API also writes JSON logs that include the trace ID and span ID of incoming requests.
 
 ```json
 {
@@ -88,10 +88,18 @@ cd demoapi
 npm start
 ```
 
-Then set the following directive in the `./democlient/run.sh` script.
+During development the API does not run behind an API gateway.\
+Set the following directive in the `./democlient/run.sh` script to call the locally running API:
 
 ```bash
 LOCAL_API='true'
 ```
 
-During development the API does not run behind an API gateway, but you can see its spans at `http://traces.example.com`.
+Then run the demo client to generate local API requests with an access token:
+
+```bash
+`./democlient/run.sh`
+```
+
+The API exports traces to the Open Telemetry Collector at `http://localhost:4318/v1/traces`.\
+You can then see spans from the local API at `http://traces.example.com`.
