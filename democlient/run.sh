@@ -74,7 +74,7 @@ fi
 #
 # Call the API multiple times with the access token
 #
-for API_REQUEST in $(seq 1 10)
+for API_REQUEST in $(seq 1 5)
 do
   TRACEPARENT=$(createTraceParent)
   echo "Calling API with a traceparent header of $TRACEPARENT"

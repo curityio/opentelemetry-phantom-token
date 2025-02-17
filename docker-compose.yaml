@@ -59,7 +59,6 @@ services:
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
-      - 4317:4317
       - 4318:4318
 
   #
@@ -69,4 +68,3 @@ services:
     image: openzipkin/zipkin:latest
     environment:
       - JAVA_OPTS=-Xms1024m -Xmx1024m -XX:+ExitOnOutOfMemoryError
-    restart: always

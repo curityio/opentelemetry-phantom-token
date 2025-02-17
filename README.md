@@ -2,22 +2,35 @@
 
 An example end-to-end deployment for a phantom token flow that uses OpenTelemetry.
 
-## OpenTelemetry Use Case
+## Phantom Token Flow
 
-This deployment uses OpenTelemetry for a Docker Compose deployment that runs the phantom token flow.\
-It demonstrates the use of `TraceId` and `SpanId` values between components and the use of visualization tools.
+The example uses a client that calls an API in a phantom token flow:
+
+![phantom token flow](images/phantom-token-flow.svg)
+
+Each component generates OpenTelemetry trace and span IDs and you can analyze the trace data in an observability tool.\
+The example shows all spans within the backend infrastructure, using the trace ID that the client creates:
+
+![trace-overview](images/trace-overview.png)
+
+When required, OpenTelemetry provides visibility of subrequests, to simplify investigation of technical issues:
+
+![trace-details](images/trace-details.png)
 
 ## Prerequisites
 
-- A Docker engine.
+First copy a license file for the Curity Identity Server into the `idsvr` folder.\
+Also ensure that your local computer has the following tools:
+
+- A Docker engine
 - Node.js 20 or later.
-- Copy a license file for the Curity Identity Server into the `idsvr` folder.
+- OpenSSL 3 or later.
 
 ## Components
 
 | Component | Location | Description |
 | --------- | -------- | ----------- |
-| Client | | A console shell client that initiates OAuth and API requests to begin a trace. |
+| Client | | A shell client that initiates OAuth and API requests with a `traceparent` header. |
 | API Gateway | | The Kong API gateway adds a span to the trace. |
 | API | http://api.example.com | An example Node.js API that adds a span to the trace using the OpenTelemetry SDK. |
 | Authorization Server | http://login.example.com | The Curity Identity Server adds a span to the trace. |
@@ -41,8 +54,13 @@ Then run the following commands to deploy all backend components within a Docker
 
 ## Run the Client
 
-Once the backend is deployed, run a console client that initiates OAuth and API requests:
+Wait 30 seconds or so, to ensure that all backend components are up, then run a console client that initiates OAuth and API requests:
 
 ```bash
 ./democlient/run.sh
 ```
+
+## Further Information
+
+- See the [OpenTelemetry Tracing Tutorial](https://curity.io/resources/learn/opentelemetry-tracing/) to learn more about OAuth end-to-end reliability with the Curity Identity Server.
+- Please visit [curity.io](https://curity.io/) for more information about the Curity Identity Server.
