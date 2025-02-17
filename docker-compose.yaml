@@ -1,0 +1,70 @@
+services:
+
+  #
+  # The API gateway adds a span to the OpenTelemetry collector for the phantom token plugin's introspection request
+  #
+  api-gateway:
+    image: custom_kong:3.9-ubuntu
+    ports:
+      - 80:3000
+    volumes:
+      - ./apigateway/kong.yml:/usr/local/kong/declarative/kong.yml
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml'
+      KONG_PROXY_LISTEN: '0.0.0.0:3000'
+      KONG_LOG_LEVEL: 'info'
+      KONG_TRACING_INSTRUMENTATIONS: 'http_client,request'
+      KONG_TRACING_SAMPLING_RATE: 1.0
+      KONG_PLUGINS: 'bundled,phantom-token'
+      KONG_NGINX_HTTP_LUA_SHARED_DICT: 'phantom-token 10m'
+  
+  #
+  # A simple API that adds a span to the OpenTelemetry collector for API requests
+  #
+  demoapi:
+    image: demoapi:latest
+    environment:
+      PORT: 3000
+      JWKS_URI: 'http://idsvr:8443/oauth/v2/oauth-anonymous/jwks'
+      REQUIRED_JWT_ALGORITHM: 'RS256'
+      REQUIRED_ISSUER: 'http://login.example.com/oauth/v2/oauth-anonymous'
+      REQUIRED_AUDIENCE: 'api.example.com'
+      OTEL_SERVICE_NAME: 'demoapi'
+      OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4318/v1/traces'
+
+  #
+  # The Curity Identity Server adds a span to the OpenTelemetry collector for incoming OAuth requests
+  #
+  idsvr:
+    image: curity.azurecr.io/curity/idsvr:latest
+    ports:
+     - 6749:6749
+     - 4466:4466
+    volumes:
+     - ./idsvr/license.json:/opt/idsvr/etc/init/license/license.json
+     - ./idsvr/config-backup.xml:/opt/idsvr/etc/init/config.xml
+     - ./idsvr/log4j2.xml:/opt/idsvr/etc/log4j2.xml
+    environment:
+      ADMIN: 'true'
+      PASSWORD: 'Password1'
+      LOGGING_LEVEL: 'INFO'
+
+  #
+  # The collector receives data and distributes it to Zipkin for visualization
+  #
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/etc/otel-collector-config.yaml", ""]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - 4318:4318
+
+  #
+  # Zipkin provides visualization of the overall trace data for all backend requests
+  #
+  zipkin:
+    image: openzipkin/zipkin:latest
+    environment:
+      - JAVA_OPTS=-Xms1024m -Xmx1024m -XX:+ExitOnOutOfMemoryError
