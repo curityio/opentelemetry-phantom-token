@@ -1,0 +1,50 @@
+_format_version: '2.1'
+_transform: true
+
+services:
+
+# Routes for OAuth requests
+- name: idsvr
+  url: http://idsvr:8443
+  routes:
+  - name: idsvr
+    hosts:
+    - login.example.com
+    paths:
+    - /
+  plugins:
+  - name: opentelemetry
+    service: idsvr
+    config:
+      endpoint: http://otel-collector:4318/v1/traces
+
+# Routes for API requests that use the phantom token plugin
+- name: demoapi
+  url: http://demoapi:3000
+  routes:
+  - name: demoapi
+    hosts:
+    - api.example.com
+    paths:
+    - /
+  plugins:
+  - name: phantom-token
+    config:
+      introspection_endpoint: http://idsvr:8443/oauth/v2/oauth-introspect
+      client_id: api-gateway-client
+      client_secret: Password1
+      token_cache_seconds: 300
+  - name: opentelemetry
+    service: demoapi
+    config:
+      endpoint: http://otel-collector:4318/v1/traces
+
+# A simple route to the Zipkin frontend
+- name: traces
+  url: http://zipkin:9411
+  routes:
+  - name: zipkin
+    hosts:
+    - traces.example.com
+    paths:
+    - /
