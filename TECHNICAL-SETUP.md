@@ -1,6 +1,7 @@
 # Technical Setup
 
-The following notes explain further details about the technical setup and the example API.
+The following notes explain further details about the technical setup and the example API.\
+The deployment is based on the [OpenTelemetry Collector Demo](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/examples/demo).
 
 ## Open Telemetry Collector
 
