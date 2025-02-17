@@ -8,8 +8,8 @@ The example uses a client that calls an API in a phantom token flow:
 
 ![phantom token flow](images/phantom-token-flow.svg)
 
-Each component generates OpenTelemetry trace and span IDs and you can analyze the trace data in an observability tool.\
-The example shows all spans within the backend infrastructure, using the trace ID that the client creates:
+During an API request, each component generates OpenTelemetry spans within an overall trace.\
+You can view all traces within an observability tool, within a TraceId that the client generates:
 
 ![trace-overview](images/trace-overview.png)
 
@@ -33,7 +33,7 @@ Also ensure that your local computer has the following tools:
 | Client | | A shell client that initiates OAuth and API requests with a `traceparent` header. |
 | API Gateway | | The Kong API gateway adds a span to the trace. |
 | API | http://api.example.com | An example Node.js API that adds a span to the trace using the OpenTelemetry SDK. |
-| Authorization Server | http://login.example.com | The Curity Identity Server adds a span to the trace. |
+| Curity Identity Server | http://login.example.com | The Curity Identity Server adds a span to the trace for all OAuth requests. |
 | OpenTelemetry Collector | | The OpenTelemetry collector receives and distributes trace data. |
 | Zipkin | http://traces.example.com | The Zipkin frontend visualizes the end-to-end trace data. |
 
@@ -62,5 +62,6 @@ Wait 30 seconds or so, to ensure that all backend components are up, then run a 
 
 ## Further Information
 
+- See the [Technical Setup Notes](TECHNICAL-SETUP.md) for more information on the API and client.
 - See the [OpenTelemetry Tracing Tutorial](https://curity.io/resources/learn/opentelemetry-tracing/) to learn more about OAuth end-to-end reliability with the Curity Identity Server.
 - Please visit [curity.io](https://curity.io/) for more information about the Curity Identity Server.
