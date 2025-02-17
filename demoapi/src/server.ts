@@ -4,14 +4,11 @@ import { Configuration } from './configuration.js';
 import { ExceptionHandler } from './errors/exceptionHandler.js';
 import { LoggerMiddleware } from './logging/loggerMiddleware.js';
 import { OAuthFilter } from './oauth/oauthFilter.js';
-import startTracing from './opentelemetry/telemetry.js';
 
 // Configure OpenTelemetry
 const configuration = new Configuration();
-startTracing(configuration);
 
 // Load Express once OpenTelemetry has finished loading
-//const express = (await import('express')).default;
 const application = express();
 
 // A logging middleware

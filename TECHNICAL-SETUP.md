@@ -39,9 +39,8 @@ registerInstrumentations({
 });
 ```
 
-The API uses ECMAScript modules so follows the guidelines for [OpenTelemetry ESM Support](https://github.com/open-telemetry/opentelemetry-js/blob/main/doc/esm-support.md).
-This means the 
-must load the OpenTelemetry SDK before Express and http libraries, and runs with the following command.
+The API uses ECMAScript modules so follows the guidelines for [OpenTelemetry ESM Support](https://github.com/open-telemetry/opentelemetry-js/blob/main/doc/esm-support.md).\
+This means it starts with the following command to load OpenTelemetry before the application code.
 
 ```text
 node --experimental-loader=@opentelemetry/instrumentation/hook.mjs --import ./dist/telemetry.js dist/server.js

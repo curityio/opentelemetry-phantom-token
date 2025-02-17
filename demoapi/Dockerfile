@@ -11,4 +11,4 @@ RUN npm install --omit=dev
 
 USER 10001
 
-CMD ["node", "--disable-warning=ExperimentalWarning", "--experimental-loader=@opentelemetry/instrumentation/hook.mjs", "dist/server.js"]
+CMD ["node", "--disable-warning=ExperimentalWarning", "--experimental-loader=@opentelemetry/instrumentation/hook.mjs", "--import", "./dist/telemetry.js", "dist/server.js"]

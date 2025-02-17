@@ -11,7 +11,7 @@
     },
     "scripts": {
         "build": "rm -rf dist && tsc",
-        "start": "npm run build && node --disable-warning=ExperimentalWarning --env-file .env --experimental-loader=@opentelemetry/instrumentation/hook.mjs dist/server.js"
+        "start": "npm run build && node --env-file .env --disable-warning=ExperimentalWarning --experimental-loader=@opentelemetry/instrumentation/hook.mjs --import ./dist/telemetry.js dist/server.js"
     },
     "dependencies": {
         "@opentelemetry/api": "^1.9.0",
