@@ -3,7 +3,9 @@ _transform: true
 
 services:
 
+#
 # Routes for OAuth requests
+#
 - name: idsvr
   url: http://idsvr:8443
   routes:
@@ -16,9 +18,15 @@ services:
   - name: opentelemetry
     service: idsvr
     config:
-      endpoint: http://otel-collector:4318/v1/traces
+      traces_endpoint: http://otel-collector:4318/v1/traces
 
+#
 # Routes for API requests that use the phantom token plugin
+# - Note that Kong does not currently expose OpenTelemetry tracing data to custom plugins.
+# - Therefore the introspection request to the Curity Identity Server generates its own trace ID.
+# - This could potentially be worked around using the techniques from the following thread.
+# - https://github.com/Kong/kong/issues/10695
+#
 - name: demoapi
   url: http://demoapi:3000
   routes:
@@ -37,9 +45,11 @@ services:
   - name: opentelemetry
     service: demoapi
     config:
-      endpoint: http://otel-collector:4318/v1/traces
+      traces_endpoint: http://otel-collector:4318/v1/traces
 
+#
 # A simple route to the Zipkin frontend
+#
 - name: traces
   url: http://zipkin:9411
   routes:
