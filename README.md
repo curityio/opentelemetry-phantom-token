@@ -42,7 +42,7 @@ Also ensure that your local computer has the following tools.
 First add these entries to the local computer's `/etc/hosts` file:
 
 ```text
-api.example.com login.example.com traces.example.com
+127.0.0.1 api.example.com login.example.com traces.example.com
 ```
 
 Then run the following commands to deploy all backend components within a Docker Compose network.
